@@ -1,0 +1,117 @@
+<div class="row justify-content-center">
+    
+        <div class="col-3 mt-4">
+            <form [formGroup]="myForm" 
+                 autocomplete="off" 
+                 (ngSubmit)="addOrEdit()">
+
+                <div class="mb-6">
+                  <label for="user_name" class="form-label">Nombre de usuario</label>
+
+                  <input type="text" 
+                         class="form-control"  
+                         formControlName="name"
+                         >
+                    <span class="form-text text-danger"
+                        *ngIf="inputValid('name')">
+                        Este campo es obligatorio
+                    </span>
+                        
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input  type="password" 
+                            class="form-control" 
+                            id="password"
+                            formControlName="password"
+                            >
+                    <span class="form-text text-danger"
+                            *ngIf="inputValid('password')">
+                            Debe tener un minimo de 6 caracteres
+                    </span>
+                    
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="form-label">Confirma la Contraseña</label>
+                    <input type="password" 
+                            class="form-control" 
+                            id="passwordConf"
+                            formControlName="passwordConfirm"
+                            >
+                    <span class="form-text text-danger"
+                            *ngIf="!passConfirm(),  inputValid('passwordConfirm')">
+                            Las contraseñas deben coincidir
+                    </span>
+                </div>
+
+                <div class="mb-6">
+                    <label for="email" class="form-label">Correo</label>
+                    <input  type="email" 
+                            class="form-control" 
+                            id="email"
+                            name="email"
+                            formControlName="email"
+                            >
+                    <span class="form-text text-danger"
+                            *ngIf="inputValid('email')">
+                            Introduzca un email valido
+                    </span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <label class="ofertas_check" 
+                           for="exampleCheck1"
+                           >Envíame ofertas promocionales</label>
+                    <input type="checkbox" 
+                            class="form-check-input" 
+                            id="ofertas_check"
+                            name="user.subscribed"
+                            formControlName="subscribed"
+                            >
+                </div>
+              
+                <select class="form-select"
+                        formControlName="country">
+                    <option selected disabled value="">País</option>
+                    <option *ngFor="let country of countries" 
+                            [value]="country">
+                        {{country}}
+                    </option>
+                </select>
+
+                <div class="mb-6">
+                    <label for="city" class="form-label">Ciudad</label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="city"
+                            formControlName="city"
+                            >
+                    <span class="form-text text-danger"
+                            *ngIf="inputValid('city')">
+                            Introduzca una ciudad valida
+                    </span>
+                </div>
+
+                <div class="mb-6">
+                    <button type="submit" 
+                            class="btn btn-primary mt-2"
+                            [disabled]="myForm.invalid">
+                            {{(buttonAction) ? 'Actualizar': 'Crear'}}
+                    </button>    
+                </div>
+
+            </form>
+        </div>
+
+        <div class="col-8">
+            <app-table [users]="users"
+                       (updateUser)="userUpdate($event)"></app-table>
+        </div>
+ 
+
+</div>
+
+
+

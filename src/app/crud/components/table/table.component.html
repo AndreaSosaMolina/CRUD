@@ -1,0 +1,39 @@
+<table class="table  table-hover table-bordered mt-4 ">
+    <thead class="table-primary">
+      <tr class="text-center">
+        <th>Nombre de Usuario</th>
+        <th>Correo</th>
+        <th>Suscrito</th>
+        <th>País</th>
+        <th>Ciudad</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let user of users">
+        <tr >
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td class="text-center">{{user.subscribed | suscribed}}</td>
+          <td>{{user.country}}</td>
+          <td>{{user.city}}</td>
+        
+        
+            <td class="text-center">
+              <button class="btn btn-warning mx-1"
+                      [routerLink]="['/crud', user.id]"
+                      (click)="editarUser(user)">
+                      <i class="bi bi-pencil-square"></i>
+              </button>
+            
+              <button class="btn btn-danger"
+                      [routerLink]="['/crud']"
+                      (click)="deleteUser(user)">
+                      <i class="bi bi-trash3"></i>
+              </button>
+            </td>
+      
+        </tr>
+      
+    </tbody>
+  </table>
