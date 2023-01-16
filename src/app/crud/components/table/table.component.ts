@@ -10,8 +10,6 @@ import { CrudService } from '../../services/crud-services.service';
 })
 export class TableComponent   {
 
-  
-
   @Input() users: User[] = []
 
   @Output() updateUser: EventEmitter<User> = new EventEmitter();
@@ -25,9 +23,7 @@ export class TableComponent   {
   }
 
   editarUser(user: User){
-    
     this.updateUser.emit(user)
-    
   }
 
   deleteUser(user: User){

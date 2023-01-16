@@ -1,7 +1,8 @@
-import { Component, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { User} from '../../interfaces/interfaces';
 import { CrudService } from '../../services/crud-services.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { emailPattern, namePatter } from '../../validators/validator';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class FormComponent {
 
   users: User[]= [];
   buttonAction: boolean = false;
-  user!: User 
+  
   
 
   getUsers(){
@@ -38,15 +39,13 @@ export class FormComponent {
     this.getUsers();
   }
 
-   private emailPattern =/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
-
 
   myForm: FormGroup = this.fb.group({
     id:           [''],
-    name:         ['', [Validators.required, Validators.minLength(3)]],
+    name:         ['', [Validators.required,Validators.pattern(namePatter), Validators.minLength(3)]],
     password:     ['', [Validators.required, Validators.minLength(6)]],
     passwordConfirm: ['', [Validators.required, Validators.minLength(6)]],
-    email:        ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+    email:        ['', [Validators.required, Validators.pattern(emailPattern)]],
     subscribed:   [false],
     country:      ['', Validators.required],
     city:         ['', [Validators.required]]
@@ -69,7 +68,8 @@ export class FormComponent {
   }
 
   inputValid( campo: string){
-     return this.myForm.controls[campo].errors && this.myForm.controls[campo].touched
+     return this.myForm.controls[campo].errors && 
+            this.myForm.controls[campo].touched
   }
 
   
@@ -77,6 +77,7 @@ export class FormComponent {
     const userForm = this.myForm.value
     const userID = this.myForm.value.id
 
+    //Si viene con ID, se edita el usuario
     if(userID){
       this.crudService.updateUser(userForm)
         .subscribe( resp => {
@@ -85,7 +86,7 @@ export class FormComponent {
         })
      
       
-      
+    // Se crea uno nuevo
     } else {
       this.crudService.addUser(userForm)
         .subscribe( rep => {
@@ -95,16 +96,12 @@ export class FormComponent {
     }
   }
 
-  editUser( user: User){      
-     this.myForm.patchValue(user)
-     
-  }
 
   passConfirm(){
-    const originPass = this.myForm.get('password')?.value
+    const originalPass = this.myForm.get('password')?.value
     const copyPass   = this.myForm.get('passwordConfirm')?.value
 
-    if(originPass !== copyPass){
+    if(originalPass !== copyPass){
       return false
 
     } else {
